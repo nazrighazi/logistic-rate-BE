@@ -5,9 +5,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConsoleLogger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { IConfiguration } from 'config/configuration';
+import { LoggingInterceptor } from 'pkg/interceptors/logging.interceptor';
+import helmet from 'helmet';
 
 async function bootstrap() {
-  // Enable json logging
+  // Declare json logging
   const logger = {
     logger: new ConsoleLogger({
       json: true,
@@ -31,8 +33,23 @@ async function bootstrap() {
     SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, documentFactory);
 
+  // Get env config
   const envConfigService = app.get(ConfigService);
   const envConfig = envConfigService.get<IConfiguration>('configuration');
+
+  // Enable global logging
+  app.useGlobalInterceptors(new LoggingInterceptor());
+
+  // Enable CORS
+  app.enableCors({
+    origin: envConfig?.cors?.origins || [],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
+
+  // Enable security headers
+  app.use(helmet());
 
   await app.listen(envConfig?.port || 3000);
 }

@@ -10,6 +10,15 @@ class EnvConfiguration {
 
   @IsString()
   DATABASE_PORT: string;
+
+  @IsString()
+  THROTTLER_TTL: string;
+
+  @IsString()
+  THROTTLER_LIMIT: string;
+
+  @IsString()
+  CORS_ORIGINS: string;
 }
 
 // Validate .env file
@@ -18,7 +27,7 @@ export function validateEnv(config: Record<string, unknown>) {
     enableImplicitConversion: true,
   });
   const errors = validateSync(instance, {
-    skipMissingProperties: false,
+    skipMissingProperties: false, // Set as false for now, will revisit later
   });
   if (errors.length > 0) {
     throw new Error(
