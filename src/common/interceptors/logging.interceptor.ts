@@ -33,7 +33,7 @@ export class LoggingInterceptor implements NestInterceptor {
       ip,
     };
 
-    this.logger.log('Incoming request', JSON.stringify(requestInfo));
+    this.logger.log('api request', JSON.stringify(requestInfo));
 
     const now = Date.now();
     return next.handle().pipe(
@@ -48,7 +48,7 @@ export class LoggingInterceptor implements NestInterceptor {
             responseSize: JSON.stringify(responseBody).length,
           };
 
-          this.logger.log('Request completed', JSON.stringify(responseInfo));
+          this.logger.log('success api request', JSON.stringify(responseInfo));
         },
         error: (error) => {
           const responseTime = Date.now() - now;
@@ -60,7 +60,7 @@ export class LoggingInterceptor implements NestInterceptor {
             error: error.message,
           };
 
-          this.logger.error('Request failed', JSON.stringify(errorInfo));
+          this.logger.error('failed api request', JSON.stringify(errorInfo));
         },
       }),
     );

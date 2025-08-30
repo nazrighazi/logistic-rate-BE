@@ -4,8 +4,8 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConsoleLogger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { IConfiguration } from 'config/configuration';
-import { LoggingInterceptor } from 'pkg/interceptors/logging.interceptor';
+import { IConfiguration } from 'src/config/env.config';
+import { LoggingInterceptor } from 'src/common/interceptors/logging.interceptor';
 import helmet from 'helmet';
 
 async function bootstrap() {
