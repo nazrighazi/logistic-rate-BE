@@ -8,6 +8,7 @@ import { IConfiguration } from 'src/config/env.config';
 import { LoggingInterceptor } from 'src/common/interceptors/logging.interceptor';
 import helmet from 'helmet';
 
+declare const module: any;
 async function bootstrap() {
   // Declare json logging
   const logger = {
@@ -52,5 +53,10 @@ async function bootstrap() {
   app.use(helmet());
 
   await app.listen(envConfig?.port || 3000);
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 bootstrap();
