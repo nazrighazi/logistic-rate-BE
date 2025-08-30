@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import configuration, { IConfiguration } from 'config/configuration';
-import { validateEnv } from 'config/env.validation';
-import { RateModule } from './rate/rate.module';
+import configuration, { IConfiguration } from 'src/config/env.config';
+import { validateEnv } from 'src/config/env.validation';
 import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
@@ -13,7 +12,6 @@ import { ThrottlerModule } from '@nestjs/throttler';
       load: [configuration],
       validate: validateEnv,
     }),
-
     // Import throttler with .env configuration
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
@@ -30,7 +28,6 @@ import { ThrottlerModule } from '@nestjs/throttler';
         };
       },
     }),
-    RateModule,
   ],
 })
 export class AppModule {}
